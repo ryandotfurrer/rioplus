@@ -1,4 +1,5 @@
 import { NavLink } from "react-router";
+import { ModeToggle } from "./mode-toggle";
 
 export function Navbar() {
   return (
@@ -18,6 +19,9 @@ export function Navbar() {
           <NavLink to="/mythic-plus" end>
             Mythic+
           </NavLink>
+        </li>
+        <li>
+          <ModeToggle />
         </li>
       </ul>
     </nav>
