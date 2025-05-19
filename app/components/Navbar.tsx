@@ -4,7 +4,7 @@ import { ModeToggle } from "./mode-toggle";
 export function Navbar() {
   return (
     <nav className="mb-8">
-      <ul className="flex gap-4">
+      <ul className="flex gap-4 items-center">
         <li>
           <NavLink to="/" end>
             Home
@@ -20,7 +20,7 @@ export function Navbar() {
             Mythic+
           </NavLink>
         </li>
-        <li>
+        <li className="ml-auto">
           <ModeToggle />
         </li>
       </ul>

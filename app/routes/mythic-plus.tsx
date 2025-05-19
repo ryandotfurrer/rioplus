@@ -1,6 +1,13 @@
+import { Form, Link } from "react-router";
 import { useEffect, useState, useCallback, useRef } from "react";
 import type { Route } from "./+types/home";
-import { Form, Link } from "react-router";
+import { Accordion } from "~/components/ui/accordion";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Select } from "~/components/ui/select";
+import { Label } from "~/components/ui/label";
+import { RegionCombobox } from "~/components/region-combobox";
+import { RealmCombobox } from "~/components/realm-combobox";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -32,8 +39,8 @@ export default function MythicPlus() {
   const [affixes, setAffixes] = useState<Affix[]>([]);
   const [affixesLoading, setAffixesLoading] = useState(true);
   const [affixesError, setAffixesError] = useState<Error | null>(null);
+  const [region, setRegion] = useState("");
   const [realm, setRealm] = useState("");
-  const [region, setRegion] = useState("us");
   const [characterName, setCharacterName] = useState("");
   const [characterData, setCharacterData] = useState<CharacterData | null>(
     null
@@ -144,45 +151,31 @@ export default function MythicPlus() {
           onSubmit={handleSubmit}
           className="mb-4 grid grid-cols-1 gap-2"
         >
-          <div>
-            <label htmlFor="region">Region:</label>
-            <select
-              id="region"
-              value={region}
-              onChange={(e) => setRegion(e.target.value)}
-              className="border rounded p-1 block"
-            >
-              <option value="us">US</option>
-              <option value="eu">EU</option>
-            </select>
+          <div className="grid gap-2">
+            <RegionCombobox region={region} onChange={setRegion} />
           </div>
           <div>
-            <label htmlFor="realm">Realm:</label>
-            <input
-              type="text"
-              id="realm"
-              value={realm}
-              onChange={(e) => setRealm(e.target.value)}
-              className="border rounded p-1 block"
-              required
-            />
+            <RealmCombobox region={region} realm={realm} onChange={setRealm} />
           </div>
           <div>
             <label htmlFor="character">Character:</label>
-            <input
+            <Input
+              type="text"
               id="character"
+              name="character"
               value={characterName}
               onChange={(e) => setCharacterName(e.target.value)}
-              className="border rounded p-1 block"
+              placeholder="Enter character name"
               required
-            ></input>
+            />
           </div>
-          <button
+          <Button
+            size={"lg"}
             type="submit"
             {...(characterLoading ? { disabled: true } : {})}
           >
             Fetch Character
-          </button>
+          </Button>
         </Form>
         {characterLoading ? (
           <p>Loading Character...</p>

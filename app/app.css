@@ -10,11 +10,7 @@
 
 html,
 body {
-  @apply bg-background text-slate-600 dark:text-slate-400;
-
-  /* @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  } */
+  @apply bg-background text-foreground-muted;
 }
 
 h1,
@@ -23,29 +19,25 @@ h3,
 h4,
 h5,
 h6 {
-  @apply font-semibold tracking-tight text-slate-900 dark:text-slate-100;
+  @apply font-semibold tracking-tight text-foreground;
+}
+
+h1 {
+  @apply text-3xl;
+}
+h2 {
+  @apply text-2xl;
+}
+h3 {
+  @apply text-xl;
 }
 
 a.active {
   @apply text-indigo-600 dark:text-indigo-400;
 }
 
-button {
-  @apply bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer;
-}
-
 button[disabled] {
   @apply cursor-not-allowed opacity-50;
-}
-
-input,
-textarea,
-select {
-  @apply border border-slate-400/50 shadow-xs dark:shadow-none;
-}
-
-details {
-  @apply cursor-pointer;
 }
 
 @theme inline {
@@ -55,6 +47,7 @@ details {
   --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -90,6 +83,7 @@ details {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
+  --foreground-muted: oklch(0.554 0.046 257.417);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
@@ -124,6 +118,7 @@ details {
 .dark {
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
+  --foreground-muted: oklch(0.554 0.046 257.417);
   --card: oklch(0.208 0.042 265.755);
   --card-foreground: oklch(0.984 0.003 247.858);
   --popover: oklch(0.208 0.042 265.755);
