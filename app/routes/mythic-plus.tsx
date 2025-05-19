@@ -1,13 +1,19 @@
 import { Form, Link } from "react-router";
 import { useEffect, useState, useCallback, useRef } from "react";
 import type { Route } from "./+types/home";
-import { Accordion } from "~/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/components/ui/accordion";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Select } from "~/components/ui/select";
 import { Label } from "~/components/ui/label";
 import { RegionCombobox } from "~/components/region-combobox";
 import { RealmCombobox } from "~/components/realm-combobox";
+import { cn } from "~/lib/utils";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -35,6 +41,7 @@ interface CharacterData {
 }
 
 export default function MythicPlus() {
+  const [isMobile, setIsMobile] = useState(true);
   const [rioData, setRioData] = useState({});
   const [affixes, setAffixes] = useState<Affix[]>([]);
   const [affixesLoading, setAffixesLoading] = useState(true);
@@ -114,42 +121,51 @@ export default function MythicPlus() {
         ) : affixesError ? (
           <p>Error: {affixesError.message}</p> // Display affixes error
         ) : affixes.length > 0 ? (
-          <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
-            {affixes.map((affix) => (
-              <div>
+          <section className="gap-4 grid grid-cols-1 md:grid-cols-2 bg-ruby-300">
+            {affixes.map((affix, index) => (
+              <div key={affix.id}>
                 <details
-                  key={affix.id}
-                  className="border border-slate-400/50 rounded p-4 shadow-xs dark:shadow-none"
+                  className={cn(
+                    "border rounded p-4 group text-background dark:shadow-none",
+                    index === 0 &&
+                      "bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 dark:from-indigo-300 dark:via-purple-300 dark:to-indigo-400 border-indigo-200/50 shadow shadow-indigo-400",
+                    index === 1 &&
+                      "bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500 dark:from-amber-300 dark:via-yellow-300 dark:to-amber-400 border-amber-200/50 shadow shadow-amber-400",
+                    index === 2 &&
+                      "bg-gradient-to-r from-orange-400 via-red-500 to-orange-500 dark:from-orange-300 dark:via-red-300 dark:to-orange-400 border-orange-200/50 shadow shadow-orange-400",
+                    index === 3 &&
+                      "bg-gradient-to-r from-red-500 via-pink-500 to-red-600 dark:from-red-300 dark:via-pink-300 dark:to-red-400 border-red-200/50 shadow shadow-red-400"
+                  )}
                 >
-                  <summary className="mb-1">{affix.name}</summary>
+                  <summary className="mb-1 font-semibold flex items-center cursor-pointer">
+                    {affix.name}
+                    <span className="ml-auto">
+                      +{index === 0 && "4"}
+                      {index === 1 && "7"}
+                      {index === 2 && "10"}
+                      {index === 3 && "12"}
+                    </span>
+                  </summary>
                   <p className="text-pretty">
-                    {affix.description}
-                    <Link
-                      to={affix.wowhead_url}
-                      className="underline text-sm block"
-                    >
+                    {affix.description}{" "}
+                    <Link to={affix.wowhead_url} className="underline text-sm">
                       View on Wowhead
                     </Link>
                   </p>
-                  <img
-                    src={affix.icon_url}
-                    alt=""
-                    className="size-12 rounded my-1"
-                  />
                 </details>
               </div>
             ))}
-          </div>
+          </section>
         ) : (
           <p>No affixes found.</p>
         )}
       </section>
-      <section>
+      <section className="space-y-4 mb-8">
         <h2>Character Information</h2>
         <Form
           method="post"
           onSubmit={handleSubmit}
-          className="mb-4 grid grid-cols-1 gap-2"
+          className="mb-4 grid grid-cols-1 gap-2 w-full md:w-1/3"
         >
           <div className="grid gap-2">
             <RegionCombobox region={region} onChange={setRegion} />
@@ -157,7 +173,7 @@ export default function MythicPlus() {
           <div>
             <RealmCombobox region={region} realm={realm} onChange={setRealm} />
           </div>
-          <div>
+          <div className="">
             <label htmlFor="character">Character:</label>
             <Input
               type="text"
@@ -169,13 +185,16 @@ export default function MythicPlus() {
               required
             />
           </div>
-          <Button
-            size={"lg"}
-            type="submit"
-            {...(characterLoading ? { disabled: true } : {})}
-          >
-            Fetch Character
-          </Button>
+          <div>
+            <Button
+              className="w-full"
+              size={"lg"}
+              type="submit"
+              {...(characterLoading ? { disabled: true } : {})}
+            >
+              Fetch Character
+            </Button>
+          </div>
         </Form>
         {characterLoading ? (
           <p>Loading Character...</p>

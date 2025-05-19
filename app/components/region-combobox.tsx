@@ -55,7 +55,7 @@ export function RegionCombobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-full justify-between"
         >
           {value
             ? regions.find((region) => region.value === value)?.label
