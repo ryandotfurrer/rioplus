@@ -19,7 +19,6 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Label } from "~/components/ui/label";
-import { RegionCombobox } from "~/components/region-combobox";
 import { RealmCombobox } from "~/components/realm-combobox";
 import { cn } from "~/lib/utils";
 
@@ -42,10 +41,17 @@ interface Affix {
   icon_url: string;
 }
 interface CharacterData {
+  last_crawled_at: string;
+  mythic_plus_scores_by_season: any;
+  mythic_plus_ranks: any;
+  mythic_plus_best_runs: any;
   class: string;
   active_spec_name: string;
   name: string;
   race: string;
+  guild: {
+    name: string;
+  };
 }
 
 export default function MythicPlus() {
@@ -54,9 +60,9 @@ export default function MythicPlus() {
   const [affixes, setAffixes] = useState<Affix[]>([]);
   const [affixesLoading, setAffixesLoading] = useState(true);
   const [affixesError, setAffixesError] = useState<Error | null>(null);
-  const [region, setRegion] = useState("");
-  const [realm, setRealm] = useState("");
-  const [characterName, setCharacterName] = useState("");
+  const [region, setRegion] = useState<string>("US"); // Default to "US"
+  const [realm, setRealm] = useState<string>("");
+  const [characterName, setCharacterName] = useState<string>("");
   const [characterData, setCharacterData] = useState<CharacterData | null>(
     null
   );
@@ -91,6 +97,11 @@ export default function MythicPlus() {
   }, []);
 
   const fetchCharacter = useCallback(async () => {
+    if (!region || !realm || !characterName) {
+      setCharacterError(new Error("Please provide all required fields."));
+      return;
+    }
+
     setCharacterLoading(true);
     setCharacterData(null);
     setCharacterError(null);
@@ -104,13 +115,13 @@ export default function MythicPlus() {
       const data = await response.json();
       setCharacterData(data);
     } catch (error) {
-      setCharacterError(error as Error); // Use the character error state
+      setCharacterError(error as Error);
     } finally {
       setCharacterLoading(false);
     }
   }, [region, realm, characterName]);
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     fetchCharacter();
   };
@@ -127,7 +138,7 @@ export default function MythicPlus() {
         {affixesLoading ? (
           <p>Loading Affixes...</p>
         ) : affixesError ? (
-          <p>Error: {affixesError.message}</p> // Display affixes error
+          <p>Error: {affixesError.message}</p>
         ) : affixes.length > 0 ? (
           <section className="gap-4 grid grid-cols-1 md:grid-cols-2 bg-ruby-300">
             {affixes.map((affix, index) => (
@@ -234,42 +245,51 @@ export default function MythicPlus() {
                 {characterData.race} {characterData.active_spec_name}{" "}
                 {characterData.class}
               </p>
-              <p>
-                <span className="font-semibold">Guild</span>:{" "}
-                {characterData.guild.name}
-              </p>
+              {characterData.guild && (
+                <p>
+                  <span className="font-semibold">Guild</span>:{" "}
+                  {characterData.guild.name}
+                </p>
+              )}
               <p className="text-sm">
                 Last updated:{" "}
-                {new Date(characterData.last_crawled_at).toLocaleDateString()}
+                {characterData.last_crawled_at &&
+                  new Date(characterData.last_crawled_at).toLocaleDateString()}
               </p>
             </div>
             <div>
               <h3>Current Season Stats</h3>
-              <p>
-                Score:{" "}
-                {characterData.mythic_plus_scores_by_season[0].scores.all}
-              </p>
+              {characterData.mythic_plus_scores_by_season?.[0]?.scores?.all && (
+                <p>
+                  Score:{" "}
+                  {characterData.mythic_plus_scores_by_season[0].scores.all}
+                </p>
+              )}
               <div>
                 <ul>
                   Ranking:
-                  <li>
-                    <span className="font-semibold">World</span>:{" "}
-                    {characterData.mythic_plus_ranks.overall.world}
-                  </li>
-                  <li>
-                    <span className="font-semibold">Region</span>:{" "}
-                    {characterData.mythic_plus_ranks.overall.region}
-                  </li>
-                  <li>
-                    <span className="font-semibold">Realm</span>:{" "}
-                    {characterData.mythic_plus_ranks.overall.realm}
-                  </li>
+                  {characterData.mythic_plus_ranks?.overall && (
+                    <>
+                      <li>
+                        <span className="font-semibold">World</span>:{" "}
+                        {characterData.mythic_plus_ranks.overall.world}
+                      </li>
+                      <li>
+                        <span className="font-semibold">Region</span>:{" "}
+                        {characterData.mythic_plus_ranks.overall.region}
+                      </li>
+                      <li>
+                        <span className="font-semibold">Realm</span>:{" "}
+                        {characterData.mythic_plus_ranks.overall.realm}
+                      </li>
+                    </>
+                  )}
                 </ul>
               </div>
               <div>
                 <h3>Top Runs of the Season</h3>
                 <Accordion type="single" collapsible>
-                  {characterData.mythic_plus_best_runs.map((run) => (
+                  {characterData.mythic_plus_best_runs?.map((run) => (
                     <AccordionItem
                       key={run.keystone_run_id}
                       value={run.keystone_run_id}

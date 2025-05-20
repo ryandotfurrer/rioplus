@@ -1,9 +1,9 @@
-("use client");
+"use client";
 
 import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
-
 import { cn } from "~/lib/utils";
+import { useMediaQuery } from "~/hooks/use-media-query";
 import { Button } from "~/components/ui/button";
 import {
   Command,
@@ -13,6 +13,16 @@ import {
   CommandItem,
   CommandList,
 } from "~/components/ui/command";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "~/components/ui/drawer";
 import {
   Popover,
   PopoverContent,
@@ -601,54 +611,108 @@ export function RealmCombobox({
 }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(realm);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const realms = (region in allRealms ? allRealms[region as Region] : []) || [];
-
+  if (isDesktop) {
+    return (
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="w-full justify-between"
+          >
+            {value
+              ? realms.find((realm) => realm.value === value)?.label
+              : "Select a realm"}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[200px] p-0">
+          <Command>
+            <CommandInput placeholder="Select a realm" />
+            <CommandList>
+              <CommandEmpty>No realm found.</CommandEmpty>
+              <CommandGroup>
+                {realms.map((realm) => (
+                  <CommandItem
+                    key={realm.value}
+                    value={realm.value}
+                    onSelect={(currentValue) => {
+                      const newValue =
+                        currentValue === value ? "" : currentValue;
+                      setValue(newValue);
+                      onChange(newValue); // Notify parent
+                      setOpen(false);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === realm.value ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {realm.label}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    );
+  }
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-full justify-between"
-        >
-          {value
-            ? realms.find((realm) => realm.value === value)?.label
-            : "Select a realm"}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="Select a realm" />
-          <CommandList>
-            <CommandEmpty>No realm found.</CommandEmpty>
-            <CommandGroup>
-              {realms.map((realm) => (
-                <CommandItem
-                  key={realm.value}
-                  value={realm.value}
-                  onSelect={(currentValue) => {
-                    const newValue = currentValue === value ? "" : currentValue;
-                    setValue(newValue);
-                    onChange(newValue); // Notify parent
-                    setOpen(false);
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === realm.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {realm.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <Drawer open={open} onOpenChange={setOpen}>
+      <DrawerTrigger asChild className="w-full">
+        <Button variant="outline">Select your realm</Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader className="text-left">
+          <DrawerTitle>Select your realm</DrawerTitle>
+          <DrawerDescription>
+            Select the realm your character is on.
+          </DrawerDescription>
+        </DrawerHeader>
+        <div>
+          <Command>
+            <CommandInput placeholder="Select a realm" />
+            <CommandList>
+              <CommandEmpty>No realm found.</CommandEmpty>
+              <CommandGroup>
+                {realms.map((realm) => (
+                  <CommandItem
+                    key={realm.value}
+                    value={realm.value}
+                    onSelect={(currentValue) => {
+                      const newValue =
+                        currentValue === value ? "" : currentValue;
+                      setValue(newValue);
+                      onChange(newValue); // Notify parent
+                      setOpen(false);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === realm.value ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {realm.label}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </div>
+        <DrawerFooter>
+          <DrawerClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }
