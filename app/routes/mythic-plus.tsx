@@ -88,7 +88,7 @@ export default function MythicPlus() {
     setCharacterError(null);
     try {
       const response = await fetch(
-        `https://raider.io/api/v1/characters/profile?access_key=RIO1irVueuVxGKwtqzZ91Ngzi&region=${region}&realm=${realm}&name=${characterName}`
+        `https://raider.io/api/v1/characters/profile?access_key=RIO1irVueuVxGKwtqzZ91Ngzi&region=${region}&realm=${realm}&name=${characterName}&fields=gear%2Ctalents%3Acategorized%2Cguild%2Craid_progression%2Cmythic_plus_scores_by_season%3Acurrent%2Cmythic_plus_ranks%2Cmythic_plus_recent_runs%2Cmythic_plus_best_runs%3Aall`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -161,7 +161,7 @@ export default function MythicPlus() {
         )}
       </section>
       <section className="space-y-4 mb-8">
-        <h2>Character Information</h2>
+        <h2>Character Lookup</h2>
         <Form
           method="post"
           onSubmit={handleSubmit}
@@ -204,15 +204,82 @@ export default function MythicPlus() {
               Character not found
             </span>{" "}
             - check the information you provided and try again.
-          </p> // Display character error
+          </p>
         ) : characterData ? (
-          <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
+          <div className="gap-4 grid grid-cols-1">
             <div>
               <h3>{characterData.name}</h3>
               <p>
                 {characterData.race} {characterData.active_spec_name}{" "}
                 {characterData.class}
               </p>
+              <p>
+                <span className="font-semibold">Guild</span>:{" "}
+                {characterData.guild.name}
+              </p>
+              <p className="text-sm">
+                Last updated:{" "}
+                {new Date(characterData.last_crawled_at).toLocaleDateString()}
+              </p>
+            </div>
+            <div>
+              <h3>Current Season Stats</h3>
+              <p>
+                Score:{" "}
+                {characterData.mythic_plus_scores_by_season[0].scores.all}
+              </p>
+              <div>
+                <ul>
+                  Ranking:
+                  <li>
+                    <span className="font-semibold">World</span>:{" "}
+                    {characterData.mythic_plus_ranks.overall.world}
+                  </li>
+                  <li>
+                    <span className="font-semibold">Region</span>:{" "}
+                    {characterData.mythic_plus_ranks.overall.region}
+                  </li>
+                  <li>
+                    <span className="font-semibold">Realm</span>:{" "}
+                    {characterData.mythic_plus_ranks.overall.realm}
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h3>Top Runs of the Season</h3>
+                <Accordion type="single" collapsible>
+                  {characterData.mythic_plus_best_runs.map((run) => (
+                    <AccordionItem
+                      key={run.keystone_run_id}
+                      value={run.keystone_run_id}
+                    >
+                      <AccordionTrigger>
+                        {run.dungeon} - {run.mythic_level} -{" "}
+                        {new Date(run.completed_at).toLocaleDateString()}
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <p>
+                          Time: {(run.clear_time_ms / 60000).toFixed(2)} minutes
+                        </p>
+                        <p>Score: {run.score}</p>
+                        <p className="flex gap-2">
+                          Affixes:{" "}
+                          {run.affixes.map((affix) => (
+                            <span key={affix.id}>
+                              <Link
+                                to={affix.wowhead_url}
+                                className="underline text-sm"
+                              >
+                                {affix.name}
+                              </Link>
+                            </span>
+                          ))}
+                        </p>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
             </div>
           </div>
         ) : (
