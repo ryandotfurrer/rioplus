@@ -9,7 +9,15 @@ import {
 } from "~/components/ui/accordion";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import { Select } from "~/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { Label } from "~/components/ui/label";
 import { RegionCombobox } from "~/components/region-combobox";
 import { RealmCombobox } from "~/components/realm-combobox";
@@ -168,7 +176,20 @@ export default function MythicPlus() {
           className="mb-4 grid grid-cols-1 gap-2 w-full md:w-1/3"
         >
           <div className="grid gap-2">
-            <RegionCombobox region={region} onChange={setRegion} />
+            <Select name="region" value={region} onValueChange={setRegion}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select your region" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Regions</SelectLabel>
+                  <SelectItem value="US">US</SelectItem>
+                  <SelectItem value="EU">EU</SelectItem>
+                  <SelectItem value="KR">KR</SelectItem>
+                  <SelectItem value="TW">TW</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <RealmCombobox region={region} realm={realm} onChange={setRealm} />
