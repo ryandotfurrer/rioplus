@@ -21,6 +21,7 @@ import {
 import { Label } from "~/components/ui/label";
 import { RealmCombobox } from "~/components/realm-combobox";
 import { cn } from "~/lib/utils";
+import AffixCards from "~/components/affix-cards";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -60,7 +61,7 @@ export default function MythicPlus() {
   const [affixes, setAffixes] = useState<Affix[]>([]);
   const [affixesLoading, setAffixesLoading] = useState(true);
   const [affixesError, setAffixesError] = useState<Error | null>(null);
-  const [region, setRegion] = useState<string>("US"); // Default to "US"
+  const [region, setRegion] = useState<string>("US");
   const [realm, setRealm] = useState<string>("");
   const [characterName, setCharacterName] = useState<string>("");
   const [characterData, setCharacterData] = useState<CharacterData | null>(
@@ -132,53 +133,7 @@ export default function MythicPlus() {
         <h1>Mythic+</h1>
         <p>See this week's affixes and learn more about them!</p>
       </header>
-
-      <section className="space-y-4 mb-8">
-        <h2>This Week's Affixes</h2>
-        {affixesLoading ? (
-          <p>Loading Affixes...</p>
-        ) : affixesError ? (
-          <p>Error: {affixesError.message}</p>
-        ) : affixes.length > 0 ? (
-          <section className="gap-4 grid grid-cols-1 md:grid-cols-2 bg-ruby-300">
-            {affixes.map((affix, index) => (
-              <div key={affix.id}>
-                <details
-                  className={cn(
-                    "border rounded p-4 group text-background dark:shadow-none",
-                    index === 0 &&
-                      "bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 dark:from-indigo-300 dark:via-purple-300 dark:to-indigo-400 border-indigo-200/50 shadow shadow-indigo-400",
-                    index === 1 &&
-                      "bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500 dark:from-amber-300 dark:via-yellow-300 dark:to-amber-400 border-amber-200/50 shadow shadow-amber-400",
-                    index === 2 &&
-                      "bg-gradient-to-r from-orange-400 via-red-500 to-orange-500 dark:from-orange-300 dark:via-red-300 dark:to-orange-400 border-orange-200/50 shadow shadow-orange-400",
-                    index === 3 &&
-                      "bg-gradient-to-r from-red-500 via-pink-500 to-red-600 dark:from-red-300 dark:via-pink-300 dark:to-red-400 border-red-200/50 shadow shadow-red-400"
-                  )}
-                >
-                  <summary className="mb-1 font-semibold flex items-center cursor-pointer">
-                    {affix.name}
-                    <span className="ml-auto">
-                      +{index === 0 && "4"}
-                      {index === 1 && "7"}
-                      {index === 2 && "10"}
-                      {index === 3 && "12"}
-                    </span>
-                  </summary>
-                  <p className="text-pretty">
-                    {affix.description}{" "}
-                    <Link to={affix.wowhead_url} className="underline text-sm">
-                      View on Wowhead
-                    </Link>
-                  </p>
-                </details>
-              </div>
-            ))}
-          </section>
-        ) : (
-          <p>No affixes found.</p>
-        )}
-      </section>
+      <AffixCards />
       <section className="space-y-4 mb-8">
         <h2>Character Lookup</h2>
         <Form
