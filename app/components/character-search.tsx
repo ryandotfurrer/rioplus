@@ -29,13 +29,13 @@ export default function CharacterSearch() {
       return;
     }
   };
-  
+
   return (
     <>
       <Form
         method="post"
         onSubmit={handleSubmit}
-        className="mb-4 grid grid-cols-4 gap-2 items-center"
+        className="mb-4 grid space-y-4 md:grid-cols-4 md:gap-2 items-center"
       >
         <div className="grid gap-2">
           <Select name="region" value={region} onValueChange={setRegion}>
@@ -80,9 +80,9 @@ export default function CharacterSearch() {
             className="placeholder:text-sm"
           />
         </div>
-        <div className="pt-4">
+        <div>
           <Button className="w-full" type="submit">
-            Search Character
+            Search
           </Button>
         </div>
       </Form>
