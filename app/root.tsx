@@ -5,12 +5,28 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  redirect,
 } from "react-router";
 import { ThemeProvider } from "./components/theme-provider";
 
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Navbar } from "./components/Navbar";
+import CharacterSearch from "./components/character-search";
+
+export async function action({ request }: { request: Request }) {
+  const formData = await request.formData();
+  const region = formData.get("region") as string;
+  const realm = formData.get("realm") as string;
+  const character = formData.get("character") as string;
+  
+  if (!region || !realm || !character) {
+    return { error: "Please provide all required fields." };
+  }
+  
+  // Redirect to character page
+  return redirect(`/character/${region}/${encodeURIComponent(realm)}/${encodeURIComponent(character)}`);
+}
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -38,6 +54,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <body>
           <div className="container max-w-screen-lg mx-auto p-4">
             <Navbar />
+            <CharacterSearch />
             {children}
             <ScrollRestoration />
             <Scripts />

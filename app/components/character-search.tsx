@@ -12,6 +12,7 @@ import { RealmCombobox } from "./realm-combobox";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useState } from "react";
+import { Label } from "./ui/label";
 
 // The action function is now defined in the route file (mythic-plus.tsx)
 
@@ -19,7 +20,7 @@ export default function CharacterSearch() {
   const [region, setRegion] = useState<string>("US");
   const [realm, setRealm] = useState<string>("");
   const [characterName, setCharacterName] = useState<string>("");
-  
+
   const handleSubmit = (event: React.FormEvent) => {
     // Check form validity before submitting
     if (!region || !realm || !characterName) {
@@ -28,18 +29,24 @@ export default function CharacterSearch() {
       return;
     }
   };
+  
   return (
     <>
       <Form
         method="post"
         onSubmit={handleSubmit}
-        className="mb-4 grid grid-cols-1 gap-2 w-full md:w-1/3"
+        className="mb-4 grid grid-cols-4 gap-2 items-center"
       >
         <div className="grid gap-2">
           <Select name="region" value={region} onValueChange={setRegion}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select your region" />
-            </SelectTrigger>
+            <div>
+              <Label htmlFor="region" className="pb-1">
+                region
+              </Label>
+              <SelectTrigger id="region" className="w-full">
+                <SelectValue placeholder="Select your region" />
+              </SelectTrigger>
+            </div>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Regions</SelectLabel>
@@ -53,10 +60,16 @@ export default function CharacterSearch() {
         </div>
         <div>
           <input type="hidden" name="realm" value={realm} />
-          <RealmCombobox region={region} initialRealm={realm} onChange={setRealm} />
+          <RealmCombobox
+            region={region}
+            initialRealm={realm}
+            onChange={setRealm}
+          />
         </div>
-        <div className="">
-          <label htmlFor="character">Character:</label>
+        <div>
+          <Label htmlFor="character" className="pb-1">
+            Character
+          </Label>
           <Input
             type="text"
             id="character"
@@ -64,16 +77,11 @@ export default function CharacterSearch() {
             value={characterName}
             onChange={(e) => setCharacterName(e.target.value)}
             placeholder="Enter character name"
-            required
+            className="placeholder:text-sm"
           />
         </div>
-        <div>
-          <Button
-            className="w-full"
-            size={"lg"}
-            type="submit"
-
-          >
+        <div className="pt-4">
+          <Button className="w-full" type="submit">
             Search Character
           </Button>
         </div>

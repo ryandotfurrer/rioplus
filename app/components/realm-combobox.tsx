@@ -28,6 +28,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
+import { Label } from "./ui/label";
 
 type Region = "US" | "EU" | "KR" | "TW";
 
@@ -618,19 +619,26 @@ export function RealmCombobox({
   if (isDesktop) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            className="w-full justify-between"
-          >
-            {realm
-              ? realmOptions.find((option) => option.value === realm)?.label
-              : "Select a realm"}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
+        <div>
+          <Label htmlFor="realm" className="pb-1">
+            realm
+          </Label>
+          <PopoverTrigger asChild>
+            <Button
+              id="realm"
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              className="w-full justify-between"
+              type="button"
+            >
+              {realm
+                ? realmOptions.find((option) => option.value === realm)?.label
+                : "Select a realm"}
+              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+        </div>
         <PopoverContent className="w-[200px] p-0">
           <Command>
             <CommandInput placeholder="Select a realm" />
@@ -667,13 +675,18 @@ export function RealmCombobox({
   }
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild className="w-full">
-        <Button variant="outline">
-          {realm
-            ? realmOptions.find((option) => option.value === realm)?.label
-            : "Select your realm"}
-        </Button>
-      </DrawerTrigger>
+      <div>
+        <Label htmlFor="realm" className="pb-1">
+          realm
+        </Label>
+        <DrawerTrigger asChild className="w-full">
+          <Button variant="outline" type="button" id="realm">
+            {realm
+              ? realmOptions.find((option) => option.value === realm)?.label
+              : "Select your realm"}
+          </Button>
+        </DrawerTrigger>
+      </div>
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle>Select your realm</DrawerTitle>
