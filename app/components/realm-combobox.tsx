@@ -613,7 +613,8 @@ export function RealmCombobox({
   const [realm, setRealm] = React.useState(initialRealm);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  const realmOptions = (region in allRealms ? allRealms[region as Region] : []) || [];
+  const realmOptions =
+    (region in allRealms ? allRealms[region as Region] : []) || [];
   if (isDesktop) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
