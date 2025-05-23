@@ -1,10 +1,2 @@
-# Netlify redirects
-
 # Fallback to index for SPA routing
-/*                           /index.html            200
-
-# Redirect from old paths if needed
-# /old-path                  /new-path              301
-
-# API proxying (if needed)
-# /api/*                     https://api.example.com/:splat    200
+/*    /index.html    200
