@@ -36,7 +36,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
         <body>
-          <div className="container mx-auto p-4">
+          <div className="container max-w-screen-lg mx-auto p-4">
             <Navbar />
             {children}
             <ScrollRestoration />
@@ -69,7 +69,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
+    <main className="pt-16 p-4 container  mx-auto">
       <h1>{message}</h1>
       <p>{details}</p>
       {stack && (

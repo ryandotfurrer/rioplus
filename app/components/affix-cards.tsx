@@ -50,53 +50,48 @@ export default function AffixCards() {
 
   return (
     <>
-      <section className="space-y-4 mb-8">
-        <h2>This Week's Affixes</h2>
-        {affixesLoading ? (
-          <p>Loading Affixes...</p>
-        ) : affixesError ? (
-          <p>Error: {affixesError.message}</p>
-        ) : affixes.length > 0 ? (
-          <div className="gap-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
-            {affixes.map((affix, index) => (
-              <div key={affix.id}>
-                <Accordion
-                  type="single"
-                  collapsible
-                  className="w-full group border rounded shadow-xs dark:shadow-none"
-                >
-                  <AccordionItem value={affix.id.toString()}>
-                    <AccordionTrigger className="px-4 py-3 font-semibold">
-                      <span className="group-hover:underline">
-                        {affix.name}
-                      </span>
-                      <span className="ml-auto mr-4 !underline-none">
-                        +{index === 0 && "4"}
-                        {index === 1 && "7"}
-                        {index === 2 && "10"}
-                        {index === 3 && "12"}
-                      </span>
-                    </AccordionTrigger>
-                    <AccordionContent className="px-4">
-                      <p className="text-pretty">
-                        {affix.description}{" "}
-                        <Link
-                          to={affix.wowhead_url}
-                          className="underline text-sm hover:text-accent-custom transition-colors"
-                        >
-                          View on Wowhead
-                        </Link>
-                      </p>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p>No affixes found.</p>
-        )}
-      </section>
+      {affixesLoading ? (
+        <p>Loading Affixes...</p>
+      ) : affixesError ? (
+        <p>Error: {affixesError.message}</p>
+      ) : affixes.length > 0 ? (
+        <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
+          {affixes.map((affix, index) => (
+            <div key={affix.id}>
+              <Accordion
+                type="single"
+                collapsible
+                className="w-full group border rounded shadow-xs dark:shadow-none"
+              >
+                <AccordionItem value={affix.id.toString()}>
+                  <AccordionTrigger className="px-4 py-3 font-semibold">
+                    <span className="group-hover:underline">{affix.name}</span>
+                    <span className="ml-auto mr-4 !underline-none">
+                      +{index === 0 && "4"}
+                      {index === 1 && "7"}
+                      {index === 2 && "10"}
+                      {index === 3 && "12"}
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4">
+                    <p className="text-pretty">
+                      {affix.description}{" "}
+                      <Link
+                        to={affix.wowhead_url}
+                        className="underline text-sm hover:text-accent-custom transition-colors"
+                      >
+                        View on Wowhead
+                      </Link>
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>No affixes found.</p>
+      )}
     </>
   );
 }

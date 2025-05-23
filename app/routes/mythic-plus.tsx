@@ -1,4 +1,4 @@
-import { Form, Link } from "react-router";
+import { Link, redirect } from "react-router";
 import { useEffect, useState, useCallback, useRef } from "react";
 import type { Route } from "./+types/home";
 import {
@@ -7,21 +7,22 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
-import { Label } from "~/components/ui/label";
-import { RealmCombobox } from "~/components/realm-combobox";
-import { cn } from "~/lib/utils";
 import AffixCards from "~/components/affix-cards";
+import CharacterSearch from "~/components/character-search";
+
+export async function action({ request }: { request: Request }) {
+  const formData = await request.formData();
+  const region = formData.get("region") as string;
+  const realm = formData.get("realm") as string;
+  const character = formData.get("character") as string;
+  
+  if (!region || !realm || !character) {
+    return { error: "Please provide all required fields." };
+  }
+  
+  // Redirect to character page
+  return redirect(`/character/${region}/${encodeURIComponent(realm)}/${encodeURIComponent(character)}`);
+}
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -57,7 +58,6 @@ interface CharacterData {
 
 export default function MythicPlus() {
   const [isMobile, setIsMobile] = useState(true);
-  const [rioData, setRioData] = useState({});
   const [affixes, setAffixes] = useState<Affix[]>([]);
   const [affixesLoading, setAffixesLoading] = useState(true);
   const [affixesError, setAffixesError] = useState<Error | null>(null);
@@ -84,7 +84,6 @@ export default function MythicPlus() {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
           const data = await response.json();
-          setRioData(data);
           setAffixes(data.affix_details);
         } catch (error) {
           setAffixesError(error as Error);
@@ -97,92 +96,24 @@ export default function MythicPlus() {
     }
   }, []);
 
-  const fetchCharacter = useCallback(async () => {
-    if (!region || !realm || !characterName) {
-      setCharacterError(new Error("Please provide all required fields."));
-      return;
-    }
-
-    setCharacterLoading(true);
-    setCharacterData(null);
-    setCharacterError(null);
-    try {
-      const response = await fetch(
-        `https://raider.io/api/v1/characters/profile?access_key=RIO1irVueuVxGKwtqzZ91Ngzi&region=${region}&realm=${realm}&name=${characterName}&fields=gear%2Ctalents%3Acategorized%2Cguild%2Craid_progression%2Cmythic_plus_scores_by_season%3Acurrent%2Cmythic_plus_ranks%2Cmythic_plus_recent_runs%2Cmythic_plus_best_runs%3Aall`
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setCharacterData(data);
-    } catch (error) {
-      setCharacterError(error as Error);
-    } finally {
-      setCharacterLoading(false);
-    }
-  }, [region, realm, characterName]);
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    fetchCharacter();
-  };
-
   return (
     <>
       <header className="mb-8">
         <h1>Mythic+</h1>
         <p>See this week's affixes and learn more about them!</p>
       </header>
-      <AffixCards />
+
+      <section className="space-y-4 mb-8">
+        <h2>This Week's Affixes</h2>
+        <p className="text-lg text-foreground">
+          {affixes.map((affix) => affix.name).join(", ")}
+        </p>
+        <AffixCards />
+      </section>
+
       <section className="space-y-4 mb-8">
         <h2>Character Lookup</h2>
-        <Form
-          method="post"
-          onSubmit={handleSubmit}
-          className="mb-4 grid grid-cols-1 gap-2 w-full md:w-1/3"
-        >
-          <div className="grid gap-2">
-            <Select name="region" value={region} onValueChange={setRegion}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select your region" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Regions</SelectLabel>
-                  <SelectItem value="US">US</SelectItem>
-                  <SelectItem value="EU">EU</SelectItem>
-                  <SelectItem value="KR">KR</SelectItem>
-                  <SelectItem value="TW">TW</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <RealmCombobox region={region} realm={realm} onChange={setRealm} />
-          </div>
-          <div className="">
-            <label htmlFor="character">Character:</label>
-            <Input
-              type="text"
-              id="character"
-              name="character"
-              value={characterName}
-              onChange={(e) => setCharacterName(e.target.value)}
-              placeholder="Enter character name"
-              required
-            />
-          </div>
-          <div>
-            <Button
-              className="w-full"
-              size={"lg"}
-              type="submit"
-              {...(characterLoading ? { disabled: true } : {})}
-            >
-              Fetch Character
-            </Button>
-          </div>
-        </Form>
+        <CharacterSearch />
         {characterLoading ? (
           <p>Loading Character...</p>
         ) : characterError ? (
@@ -244,7 +175,7 @@ export default function MythicPlus() {
               <div>
                 <h3>Top Runs of the Season</h3>
                 <Accordion type="single" collapsible>
-                  {characterData.mythic_plus_best_runs?.map((run) => (
+                  {characterData.mythic_plus_best_runs?.map((run: any) => (
                     <AccordionItem
                       key={run.keystone_run_id}
                       value={run.keystone_run_id}
@@ -260,7 +191,7 @@ export default function MythicPlus() {
                         <p>Score: {run.score}</p>
                         <p className="flex gap-2">
                           Affixes:{" "}
-                          {run.affixes.map((affix) => (
+                          {run.affixes.map((affix: any) => (
                             <span key={affix.id}>
                               <Link
                                 to={affix.wowhead_url}

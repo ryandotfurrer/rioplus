@@ -602,18 +602,18 @@ const allRealms: Record<Region, { value: string; label: string }[]> = {
 
 export function RealmCombobox({
   region,
-  realm,
+  initialRealm,
   onChange,
 }: {
   region: string;
-  realm: string;
+  initialRealm: string;
   onChange: (value: string) => void;
 }) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState(realm);
+  const [realm, setRealm] = React.useState(initialRealm);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  const realms = (region in allRealms ? allRealms[region as Region] : []) || [];
+  const realmOptions = (region in allRealms ? allRealms[region as Region] : []) || [];
   if (isDesktop) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
@@ -624,8 +624,8 @@ export function RealmCombobox({
             aria-expanded={open}
             className="w-full justify-between"
           >
-            {value
-              ? realms.find((realm) => realm.value === value)?.label
+            {realm
+              ? realmOptions.find((option) => option.value === realm)?.label
               : "Select a realm"}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -636,14 +636,14 @@ export function RealmCombobox({
             <CommandList>
               <CommandEmpty>No realm found.</CommandEmpty>
               <CommandGroup>
-                {realms.map((realm) => (
+                {realmOptions.map((option) => (
                   <CommandItem
-                    key={realm.value}
-                    value={realm.value}
+                    key={option.value}
+                    value={option.value}
                     onSelect={(currentValue) => {
                       const newValue =
-                        currentValue === value ? "" : currentValue;
-                      setValue(newValue);
+                        currentValue === realm ? "" : currentValue;
+                      setRealm(newValue);
                       onChange(newValue); // Notify parent
                       setOpen(false);
                     }}
@@ -651,10 +651,10 @@ export function RealmCombobox({
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        value === realm.value ? "opacity-100" : "opacity-0"
+                        realm === option.value ? "opacity-100" : "opacity-0"
                       )}
                     />
-                    {realm.label}
+                    {option.label}
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -667,7 +667,11 @@ export function RealmCombobox({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild className="w-full">
-        <Button variant="outline">Select your realm</Button>
+        <Button variant="outline">
+          {realm
+            ? realmOptions.find((option) => option.value === realm)?.label
+            : "Select your realm"}
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
@@ -682,14 +686,14 @@ export function RealmCombobox({
             <CommandList>
               <CommandEmpty>No realm found.</CommandEmpty>
               <CommandGroup>
-                {realms.map((realm) => (
+                {realmOptions.map((option) => (
                   <CommandItem
-                    key={realm.value}
-                    value={realm.value}
+                    key={option.value}
+                    value={option.value}
                     onSelect={(currentValue) => {
                       const newValue =
-                        currentValue === value ? "" : currentValue;
-                      setValue(newValue);
+                        currentValue === realm ? "" : currentValue;
+                      setRealm(newValue);
                       onChange(newValue); // Notify parent
                       setOpen(false);
                     }}
@@ -697,10 +701,10 @@ export function RealmCombobox({
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        value === realm.value ? "opacity-100" : "opacity-0"
+                        realm === option.value ? "opacity-100" : "opacity-0"
                       )}
                     />
-                    {realm.label}
+                    {option.label}
                   </CommandItem>
                 ))}
               </CommandGroup>
