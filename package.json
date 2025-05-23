@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build && node netlify/prepare.js",
+    "build": "node netlify-build.js",
     "dev": "cross-env NODE_ENV=development node ./dev-server.js",
     "start": "netlify serve",
     "typecheck": "react-router typegen && tsc"
