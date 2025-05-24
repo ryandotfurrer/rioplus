@@ -680,7 +680,12 @@ export function RealmCombobox({
           realm
         </Label>
         <DrawerTrigger asChild className="w-full">
-          <Button variant="outline" type="button" id="realm">
+          <Button
+            variant="outline"
+            type="button"
+            id="realm"
+            className="justify-between"
+          >
             {realm
               ? realmOptions.find((option) => option.value === realm)?.label
               : "Select your realm"}
@@ -688,7 +693,7 @@ export function RealmCombobox({
         </DrawerTrigger>
       </div>
       <DrawerContent>
-        <DrawerHeader className="text-left">
+        <DrawerHeader>
           <DrawerTitle>Select your realm</DrawerTitle>
           <DrawerDescription>
             Select the realm your character is on.

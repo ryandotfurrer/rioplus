@@ -61,7 +61,7 @@ export default function AffixCards() {
               <Accordion
                 type="single"
                 collapsible
-                className="w-full group border rounded shadow-xs dark:shadow-none"
+                className="w-full bg-transparent dark:bg-input/30 group border rounded shadow-xs dark:shadow-none"
               >
                 <AccordionItem value={affix.id.toString()}>
                   <AccordionTrigger className="px-4 py-3 font-semibold">
