@@ -140,7 +140,7 @@ export default function CharacterPage() {
                 raidData.summary && (
                   <div
                     key={raidKey}
-                    className="p-3 rounded-md border bg-secondary/50"
+                    className="p-3 rounded-md border bg-secondary"
                   >
                     <h3 className="font-medium capitalize">
                       {raidKey.replace(/-/g, " ")}
