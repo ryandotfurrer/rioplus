@@ -10,7 +10,7 @@ import {
 import "./app.css";
 import CharacterSearch from "./components/character-search";
 import Footer from "./components/footer";
-import Navbar from "./components/navbar";
+import Navbar from "./components/Navbar";
 import type { Route } from "./+types/root";
 import { ThemeProvider } from "./components/theme-provider";
 

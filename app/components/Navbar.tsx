@@ -1,7 +1,7 @@
 import { NavLink } from "react-router";
-import { ModeToggle } from "./mode-toggle";
+import { ModeToggle } from "~/components/mode-toggle";
 
-export function Navbar() {
+export default function Navbar() {
   return (
     <nav className="mb-8">
       <ul className="flex gap-4 items-center">
