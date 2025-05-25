@@ -1,52 +1,52 @@
-# To Do List
+# MVP Task List
 
 ## Core Focus
 
 A fast, minimal, and easy to use version of raider.io
 
-### Homepage
+## Homepage
 
--[ ] Display curent affixes
--[ ] Display affix descriptions
--[ ] Character Search
+- [ ] Display curent affixes
+- [ ] Display affix descriptions
+- [ ] Character Search
 
-### Character Page
+## Character Page
 
-#### Header
+### Header
 
-- Display character information:
-  -[ ] Name
-  -[ ] Race
-  -[ ] Class
-  -[ ] (Region) Realm
-  -[ ] Item Level
-  -[ ] Guild Name
-  -[ ] Current Season Stats:
-  -[ ] Mythic+ Score
-  -[ ] Raid Progression Summary (highest difficulty)
-  -[ ] Warcraft Logs link
+**Display character information**:
+  - [ ] Name
+  - [ ] Race
+  - [ ] Class
+  - [ ] (Region) Realm
+  - [ ] Item Level
+  - [ ] Guild Name
+  - [ ] Current Season Stats:
+  - [ ] Mythic+ Score
+  - [ ] Raid Progression Summary (highest difficulty)
+  - [ ] Warcraft Logs link
 
-#### Details
+### Details
 
-##### Raid
+#### Raid
 
-- Detailed Raid Progression (current season)
-  -[ ] LFR, Normal, Heroic, and Mythic progression
+**Detailed Raid Progression (current season)**:
+  - [ ] LFR, Normal, Heroic, and Mythic progression
 
--[ ] Ability to choose previous seasons
+- [ ] Ability to choose previous seasons
 
-###### Mythic+
+#### Mythic+
 
-- Detailed M+ Information (current season)
-  -[ ] Total Score
-  -[ ] Spec scores (if present)
+**Detailed M+ Information (current season)**:
+  - [ ] Total Score
+  - [ ] Spec scores (if present)
 
-  - Total Timed runs (if present):
-    -[ ] 2+, 4+, 7+, 10+, 12+, 15+
+  **Total Timed runs (if present)**:
+    - [ ] 2+, 4+, 7+, 10+, 12+, 15+
 
-  -[ ] Top run per dungeon
-  -[ ] Ability to choose previous seasons
+  - [ ] Top run per dungeon
+  - [ ] Ability to choose previous seasons
 
-### User Accounts
+## User Accounts
 
--[ ] Ability to pin characters
+- [ ] Ability to pin characters
