@@ -16,7 +16,7 @@ export function Navbar() {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/mythic-plus" end>
+          <NavLink to="/mythic-plus" prefetch="intent" end>
             Mythic+
           </NavLink>
         </li>
