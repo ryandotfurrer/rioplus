@@ -19,10 +19,12 @@ A fast, minimal, and easy to use version of raider.io
   -[] Race
   -[] Class
   -[] (Region) Realm
+  -[] Item Level
   -[] Guild Name
   -[] Current Season Stats:
   -[] Mythic+ Score
   -[] Raid Progression Summary (highest difficulty)
+  -[] Warcraft Logs link
 
 #### Details
 

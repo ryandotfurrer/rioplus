@@ -3,17 +3,16 @@ import {
   Links,
   Meta,
   Outlet,
+  redirect,
   Scripts,
   ScrollRestoration,
-  redirect,
 } from "react-router";
-import { ThemeProvider } from "./components/theme-provider";
-
-import type { Route } from "./+types/root";
 import "./app.css";
-import Footer from "./components/footer";
 import CharacterSearch from "./components/character-search";
-import { Navbar } from "./components/navbar";
+import Footer from "./components/footer";
+import Navbar from "./components/navbar";
+import type { Route } from "./+types/root";
+import { ThemeProvider } from "./components/theme-provider";
 
 export async function action({ request }: { request: Request }) {
   const formData = await request.formData();
