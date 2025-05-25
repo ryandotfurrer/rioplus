@@ -6,47 +6,47 @@ A fast, minimal, and easy to use version of raider.io
 
 ### Homepage
 
--[] Display curent affixes
--[] Display affix descriptions
--[] Character Search
+-[ ] Display curent affixes
+-[ ] Display affix descriptions
+-[ ] Character Search
 
 ### Character Page
 
 #### Header
 
 - Display character information:
-  -[] Name
-  -[] Race
-  -[] Class
-  -[] (Region) Realm
-  -[] Item Level
-  -[] Guild Name
-  -[] Current Season Stats:
-  -[] Mythic+ Score
-  -[] Raid Progression Summary (highest difficulty)
-  -[] Warcraft Logs link
+  -[ ] Name
+  -[ ] Race
+  -[ ] Class
+  -[ ] (Region) Realm
+  -[ ] Item Level
+  -[ ] Guild Name
+  -[ ] Current Season Stats:
+  -[ ] Mythic+ Score
+  -[ ] Raid Progression Summary (highest difficulty)
+  -[ ] Warcraft Logs link
 
 #### Details
 
 ##### Raid
 
 - Detailed Raid Progression (current season)
-  -[] LFR, Normal, Heroic, and Mythic progression
+  -[ ] LFR, Normal, Heroic, and Mythic progression
 
--[] Ability to choose previous seasons
+-[ ] Ability to choose previous seasons
 
 ###### Mythic+
 
 - Detailed M+ Information (current season)
-  -[] Total Score
-  -[] Spec scores (if present)
+  -[ ] Total Score
+  -[ ] Spec scores (if present)
 
   - Total Timed runs (if present):
-    -[] 2+, 4+, 7+, 10+, 12+, 15+
+    -[ ] 2+, 4+, 7+, 10+, 12+, 15+
 
-  -[] Top run per dungeon
-  -[] Ability to choose previous seasons
+  -[ ] Top run per dungeon
+  -[ ] Ability to choose previous seasons
 
 ### User Accounts
 
--[] Ability to pin characters
+-[ ] Ability to pin characters
